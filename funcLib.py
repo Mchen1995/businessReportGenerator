@@ -10,10 +10,21 @@ def getDemandSheet(filename_of_demands):
     return demand_sheet, count
 
 
+# 读取测试用例 Excel
+def getCaseSheet(filename_of_cases):
+    sheets_list = []
+    wb = xlrd.open_workbook(filename_of_cases)
+    num_of_sheets = len(wb.sheet_names())
+    for i in range(num_of_sheets):
+        sheet = xlrd.open_workbook(filename_of_cases).sheet_by_index(i)
+        sheets_list.append(sheet)
+    return sheets_list, wb.sheet_names()
+
+
 # 创建文档
-def createDoc(filename):
+def createDoc(head):
     document = Document()
-    document.add_heading(filename, 0)  # 标题
+    document.add_heading(head, 0)  # 标题
     document.add_heading('1. 测试日期：', 1)  # 一级标题：测试日期
     document.add_heading('2. 测试人员：黄乃芳、郑杰、纪雅容、贺东琴', 1)  # 一级标题：测试人员
     document.add_heading('3. 测试结果：符合需求，测试通过', 1)  # 一级标题：测试结果
@@ -26,7 +37,8 @@ def genArgs():
     head = '集团门户业务测试报告_' + version  # 全文标题
     filename = head + '.docx'  # 测试报告文件名
     filename_of_demands = 'demand.xls'  # 需求 Excel
-    return version, head, filename, filename_of_demands
+    filename_of_cases = 'cases.xls'  # 测试案例 Excel
+    return version, head, filename, filename_of_demands, filename_of_cases
 
 
 # 生成测试结果汇总表格
@@ -54,25 +66,72 @@ def createSummarizeTable(document, demand_sheet, count):
         cell.width = Inches(1.5)
 
 
+# 获取子标题的索引，即中间列（4.1级）非空白行的索引汇总
+def count_sub_titles(column_data):
+    res = []
+    for i in range(len(column_data)):
+        if column_data[i] != '':
+            res.append(i)
+    return res
+
+
+# 获取最低级标题索引（有空白行则结束）
+def get_min_titles_index(column_data, begin_index):
+    res = []
+    for idx in range(begin_index, len(column_data)):
+        if column_data[idx] != '':
+            res.append(idx)
+        else:
+            break
+    return res
+
+
+# 生成一个案例段落
+case_id = 1
+
+
+def createCaseParagraph(document, author, case_sheet, index_of_case_paragraph):
+    global case_id
+    title = case_sheet.cell_value(0, 0)  # 4.1 xxx
+    document.add_heading('4.' + str(index_of_case_paragraph) + ' ' + title, level=2)
+
+    subtitle_gather = case_sheet.col_values(1, 0)  # 中间那列即时子标题（4.1.1 级别）的内容
+    min_title_gather = case_sheet.col_values(2, 0)  # 最低级标题（4.1.1.1 级别）的内容
+    subtitle_indexes = count_sub_titles(subtitle_gather)  # 4.1.1 级别标题非空白行的索引
+    for i in range(len(subtitle_indexes)):
+        subtitle_index = subtitle_indexes[i]
+
+        # 子标题，如 4.1.1 新增页签区配置功能
+        document.add_heading('4.' + str(index_of_case_paragraph)
+                             + '.' + str(i + 1) + subtitle_gather[subtitle_index], level=3)
+        min_title_indexes = get_min_titles_index(min_title_gather, subtitle_index)
+        for j in range(len(min_title_indexes)):
+            min_title_index = min_title_indexes[j]
+            case_name = min_title_gather[min_title_index]
+            document.add_heading('4.' + str(index_of_case_paragraph)
+                                 + '.' + str(i + 1)
+                                 + '.' + str(j + 1) + min_title_gather[min_title_index], level=4)
+            case_id = createCaseTable(document, author, case_id, case_name)
+
+
 # 生成测试案例表格
-def createCaseTable(document):
+def createCaseTable(document, author, the_case_id, case_name):
     table = document.add_table(rows=1, cols=4, style='Table Grid')
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = '测试人'
-    hdr_cells[0].style = 'red'
-    hdr_cells[1].text = ''
+    hdr_cells[1].text = author
     hdr_cells[2].text = '编写人'
-    hdr_cells[3].text = ''
+    hdr_cells[3].text = author
 
     row_cells = table.add_row().cells
     row_cells[0].text = '测试用例编号'
-    row_cells[1].text = ''
+    row_cells[1].text = str(the_case_id)
     row_cells[2].text = '测试日期'
-    row_cells[3].text = ''
+    row_cells[3].text = '年月日'
 
     row_cells = table.add_row().cells
     row_cells[0].text = '测试用例名称'
-    row_cells[1].text = ''
+    row_cells[1].text = case_name
     table.cell(2, 1).merge(table.cell(2, 2)).merge(table.cell(2, 3))  # 测试用例名称行合并为 2 列
 
     row_cells = table.add_row().cells
@@ -97,3 +156,5 @@ def createCaseTable(document):
     row_cells[0].text = '备注'
     row_cells[1].text = ''
     table.cell(7, 1).merge(table.cell(7, 2)).merge(table.cell(7, 3))  # 备注行合并为 2 列
+
+    return the_case_id + 1

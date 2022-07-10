@@ -1,11 +1,8 @@
 from funcLib import *
 
-# 获取键盘输入版本号
-version = input("输入版本号: ")
-print("正在生成：集团门户业务测试报告_" + version + ".doc")
-
 # 参数
-head, filename, filename_of_demands, filename_of_cases = genArgs(version)
+head, filename, filename_of_demands, filename_of_cases = genArgs()
+print("正在生成：" + filename)
 
 # 读取需求 Excel
 demand_sheet, number_of_demands = getDemandSheet(filename_of_demands)

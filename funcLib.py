@@ -32,11 +32,11 @@ def createDoc(head):
 
 
 # 生成参数
-def genArgs(version):
-    head = '集团门户业务测试报告_' + version  # 全文标题
-    filename = head + '.docx'  # 测试报告文件名
-    filename_of_demands = '软件下发需求_' + version + '.xls'  # 需求 Excel
-    filename_of_cases = '测试案例_' + version + '.xls'  # 测试案例 Excel
+def genArgs():
+    head = '集团门户业务测试报告_'  # 全文标题
+    filename = '/Users/chenmin/PycharmProjects/businessReport/report.docx'  # 测试报告文件名
+    filename_of_demands = '/Users/chenmin/PycharmProjects/businessReport/demands.xls'  # 需求 Excel
+    filename_of_cases = '/Users/chenmin/PycharmProjects/businessReport/cases.xls'  # 测试案例 Excel
     return head, filename, filename_of_demands, filename_of_cases
 
 

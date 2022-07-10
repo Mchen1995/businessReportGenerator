@@ -32,13 +32,12 @@ def createDoc(head):
 
 
 # 生成参数
-def genArgs():
-    version = "2.5.7.11"  # 版本号
+def genArgs(version):
     head = '集团门户业务测试报告_' + version  # 全文标题
     filename = head + '.docx'  # 测试报告文件名
-    filename_of_demands = 'demand.xls'  # 需求 Excel
-    filename_of_cases = 'cases.xls'  # 测试案例 Excel
-    return version, head, filename, filename_of_demands, filename_of_cases
+    filename_of_demands = '软件下发需求_' + version + '.xls'  # 需求 Excel
+    filename_of_cases = '测试案例_' + version + '.xls'  # 测试案例 Excel
+    return head, filename, filename_of_demands, filename_of_cases
 
 
 # 生成测试结果汇总表格

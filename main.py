@@ -1,7 +1,11 @@
 from funcLib import *
 
+# 获取键盘输入版本号
+version = input("输入版本号: ")
+print("正在生成：集团门户业务测试报告_" + version + ".doc")
+
 # 参数
-version, head, filename, filename_of_demands, filename_of_cases = genArgs()
+head, filename, filename_of_demands, filename_of_cases = genArgs(version)
 
 # 读取需求 Excel
 demand_sheet, number_of_demands = getDemandSheet(filename_of_demands)
@@ -25,3 +29,4 @@ for i in range(len(case_sheet_list)):
 
 # 保存文档
 document.save(filename)
+print("完成")

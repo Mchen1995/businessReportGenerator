@@ -9,9 +9,11 @@ head, filename, filename_of_demands, filename_of_cases = genArgs(version)
 
 # 读取需求 Excel
 demand_sheet, number_of_demands = getDemandSheet(filename_of_demands)
+print("已读取：" + filename_of_demands)
 
 # 读取测试案例 Excel
 case_sheet_list, name_list = getCaseSheet(filename_of_cases)
+print("已读取：" + filename_of_cases)
 
 # 创建文档及其开头的部分
 document = createDoc(head)

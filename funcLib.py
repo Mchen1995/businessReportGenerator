@@ -34,9 +34,9 @@ def createDoc(head):
 # 生成参数
 def genArgs():
     head = '集团门户业务测试报告_'  # 全文标题
-    filename = '/Users/chenmin/PycharmProjects/businessReport/report.docx'  # 测试报告文件名
-    filename_of_demands = '/Users/chenmin/PycharmProjects/businessReport/demands.xls'  # 需求 Excel
-    filename_of_cases = '/Users/chenmin/PycharmProjects/businessReport/cases.xls'  # 测试案例 Excel
+    filename = 'D:\\tmp\\report.docx'  # 测试报告文件名
+    filename_of_demands = 'D:\\tmp\\demands.xls'  # 需求 Excel
+    filename_of_cases = 'D:\\tmp\\cases.xls'  # 测试案例 Excel
     return head, filename, filename_of_demands, filename_of_cases
 
 

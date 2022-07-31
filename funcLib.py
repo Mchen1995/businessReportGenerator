@@ -1,6 +1,7 @@
 from docx.shared import Inches
 from docx import Document
 import xlrd
+import os
 
 
 # 读取需求 Excel
@@ -21,21 +22,44 @@ def getCaseSheet(filename_of_cases):
     return sheets_list, wb.sheet_names()
 
 
+# 获取指定目录下测试人员的测试案例（只读取一个文件）
+def collect():
+    file_path = '/Users/chenmin/PycharmProjects/businessReport/'
+    listdir = os.listdir(file_path)
+    file_found = []
+    report_name = ''
+    report_file = ''
+    author = ''
+    for filename in listdir:
+        if filename.startswith('cases'):
+            file_found.append(filename)
+            author = filename[6:-4]
+            report_name = '测试报告_' + author
+            report_file = report_name + '.docx'
+            break
+    return file_found[0], report_name, report_file, author
+
+
 # 创建文档
-def createDoc(head):
+def createDoc(head, is_total_file):
     document = Document()
-    document.add_heading(head, 0)  # 标题
-    document.add_heading('1. 测试日期：', 1)  # 一级标题：测试日期
-    document.add_heading('2. 测试人员：黄乃芳、郑杰、纪雅容、贺东琴', 1)  # 一级标题：测试人员
-    document.add_heading('3. 测试结果：符合需求，测试通过', 1)  # 一级标题：测试结果
+    if is_total_file:
+        document.add_heading(head, 0)  # 标题
+        document.add_heading('1. 测试日期：', 1)  # 一级标题：测试日期
+        document.add_heading('2. 测试人员：黄乃芳、郑杰、纪雅容、贺东琴', 1)  # 一级标题：测试人员
+        document.add_heading('3. 测试结果：符合需求，测试通过', 1)  # 一级标题：测试结果
     return document
 
 
 # 生成参数
 def genArgs():
     head = '集团门户业务测试报告_'  # 全文标题
-    filename = 'D:\\tmp\\report.docx'  # 测试报告文件名
-    filename_of_demands = 'D:\\tmp\\demands.xls'  # 需求 Excel
+    # filename = 'D:\\tmp\\report.docx'  # 测试报告文件名
+    # filename_of_demands = 'D:\\tmp\\demands.xls'  # 需求 Excel
+    # filename_of_cases = 'D:\\tmp\\cases.xls'  # 测试案例 Excel
+
+    filename = '/Users/chenmin/PycharmProjects/businessReport/集团门户业务测试报告.docx'  # 测试报告文件名
+    filename_of_demands = '/Users/chenmin/PycharmProjects/businessReport/软件下发需求.xls'  # 需求 Excel
     filename_of_cases = 'D:\\tmp\\cases.xls'  # 测试案例 Excel
     return head, filename, filename_of_demands, filename_of_cases
 
@@ -102,14 +126,14 @@ def createCaseParagraph(document, author, case_sheet, index_of_case_paragraph):
 
         # 子标题，如 4.1.1 新增页签区配置功能
         document.add_heading('4.' + str(index_of_case_paragraph)
-                             + '.' + str(i + 1) + subtitle_gather[subtitle_index], level=3)
+                             + '.' + str(i + 1) + ' ' + subtitle_gather[subtitle_index], level=3)
         min_title_indexes = get_min_titles_index(min_title_gather, subtitle_index)
         for j in range(len(min_title_indexes)):
             min_title_index = min_title_indexes[j]
             case_name = min_title_gather[min_title_index]
             document.add_heading('4.' + str(index_of_case_paragraph)
                                  + '.' + str(i + 1)
-                                 + '.' + str(j + 1) + min_title_gather[min_title_index], level=4)
+                                 + '.' + str(j + 1) + ' ' + min_title_gather[min_title_index], level=4)
             case_id = createCaseTable(document, author, case_id, case_name)
 
 

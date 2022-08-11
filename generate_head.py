@@ -4,7 +4,7 @@
 from funcLib import *
 
 # 参数
-head, filename, filename_of_demands, filename_of_cases = genArgs()
+head, filename, filename_of_demands = genArgs()
 print("正在生成：" + filename)
 
 # 读取需求 Excel

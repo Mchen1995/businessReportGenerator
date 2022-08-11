@@ -30,14 +30,19 @@ def collect():
     report_name = ''
     report_file = ''
     author = ''
+    begin_idx = ''
     for filename in listdir:
         if filename.startswith('cases'):
             file_found.append(filename)
-            author = filename[6:-4]
+            left = filename.index('[')  # [ 位置
+            right = filename.index(']')  # ] 位置
+
+            author = filename[right + 2: -4]
             report_name = '测试报告_' + author
             report_file = report_name + '.docx'
+            begin_idx = filename[left + 1:right]
             break
-    return file_found[0], report_name, report_file, author
+    return file_found[0], report_name, report_file, author, int(begin_idx)
 
 
 # 创建文档

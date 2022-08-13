@@ -148,6 +148,14 @@ def createCaseParagraph(document, author, case_sheet, index_of_case_paragraph, c
             case_begin = createCaseTable(document, author, case_begin, case_name, str(test_date), pictures_file)
 
 
+# 设置表格宽度宽度
+def set_col_widths(table):
+    widths = (Inches(1.5), Inches(1), Inches(1.5), Inches(2.5))
+    for row in table.rows:
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
+
+
 # 生成测试案例表格
 def createCaseTable(document, author, the_case_id, case_name, test_date, pictures_file):
     table = document.add_table(rows=1, cols=4, style='Table Grid')
@@ -197,5 +205,6 @@ def createCaseTable(document, author, the_case_id, case_name, test_date, picture
     row_cells[0].text = '备注'
     row_cells[1].text = ''
     table.cell(7, 1).merge(table.cell(7, 2)).merge(table.cell(7, 3))  # 备注行合并为 2 列
+    set_col_widths(table)  # 设置表格宽度
 
     return the_case_id + 1

@@ -15,7 +15,7 @@ case_sheet_list, _ = getCaseSheet(filename_of_cases)
 
 for i in range(len(case_sheet_list)):
     sheet = case_sheet_list[i]
-    createCaseParagraph(document, author, sheet, i + title_begin, i + case_begin)
+    case_begin = createCaseParagraph(document, author, sheet, i + title_begin, case_begin)
 
 # 保存文档
 document.save(report_file)

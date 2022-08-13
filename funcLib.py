@@ -90,7 +90,7 @@ def createSummarizeTable(document, demand_sheet, count):
         row_cells[3].text = '通过'  # 序号
     table.style = 'Colorful List'
     for cell in table.columns[0].cells:
-        cell.width = Inches(0.5)
+        cell.width = Inches(0.8)
     for cell in table.columns[1].cells:
         cell.width = Inches(3)
     for cell in table.columns[2].cells:
@@ -148,6 +148,7 @@ def createCaseParagraph(document, author, case_sheet, index_of_case_paragraph, c
                                  + '.' + str(i + 1)
                                  + '.' + str(j + 1) + ' ' + min_title_gather[min_title_index], level=4)
             case_begin = createCaseTable(document, author, case_begin, case_name, str(test_date), pictures_file)
+    return case_begin
 
 
 # 设置表格宽度

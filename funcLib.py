@@ -97,6 +97,7 @@ def createSummarizeTable(document, demand_sheet, count):
         cell.width = Inches(4)
     for cell in table.columns[3].cells:
         cell.width = Inches(1.5)
+    set_font(table)  # 设置表格中的字体
 
 
 # 获取子标题的索引，即中间列（4.1级）非空白行的索引汇总

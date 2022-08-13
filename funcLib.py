@@ -1,8 +1,9 @@
-from docx.shared import Inches
+from docx.shared import Inches, Pt
 from docx import Document
 import datetime
 import xlrd
 import os
+from docx.oxml.ns import qn
 
 
 # 读取需求 Excel
@@ -148,12 +149,23 @@ def createCaseParagraph(document, author, case_sheet, index_of_case_paragraph, c
             case_begin = createCaseTable(document, author, case_begin, case_name, str(test_date), pictures_file)
 
 
-# 设置表格宽度宽度
+# 设置表格宽度
 def set_col_widths(table):
     widths = (Inches(1.5), Inches(1), Inches(1.5), Inches(2.5))
     for row in table.rows:
         for idx, width in enumerate(widths):
             row.cells[idx].width = width
+
+
+# 设置表格字体
+def set_font(table):
+    for row in table.rows:
+        for cell in row.cells:
+            paragraphs = cell.paragraphs
+            for paragraph in paragraphs:
+                for run in paragraph.runs:
+                    run.font.name = "Arial"
+                    run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
 
 
 # 生成测试案例表格
@@ -206,5 +218,6 @@ def createCaseTable(document, author, the_case_id, case_name, test_date, picture
     row_cells[1].text = ''
     table.cell(7, 1).merge(table.cell(7, 2)).merge(table.cell(7, 3))  # 备注行合并为 2 列
     set_col_widths(table)  # 设置表格宽度
+    set_font(table)  # 设置表格中的字体
 
     return the_case_id + 1

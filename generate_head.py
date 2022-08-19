@@ -5,11 +5,11 @@ from funcLib import *
 
 # 参数
 head, filename, filename_of_demands = genArgs()
-print("正在生成：" + filename)
 
 # 读取需求 Excel
 demand_sheet, number_of_demands = getDemandSheet(filename_of_demands)
 print("已读取：" + filename_of_demands)
+print("正在生成：" + filename)
 
 # 创建文档及其开头的部分
 document = createDoc(head, True)
